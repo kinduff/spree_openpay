@@ -1,0 +1,117 @@
+<%= image_tag 'credit_cards/credit_card.gif', :id => 'credit-card-image' %>
+<% param_prefix = "payment_source[#{payment_method.id}]" %>
+
+
+<p class="field">
+  <%= label_tag "name_on_card_#{payment_method.id}", Spree.t(:name_on_card) %><span class="required">*</span><br />
+  <%= text_field_tag "#{param_prefix}[name]",
+                     "#{@order.billing_firstname} #{@order.billing_lastname}",
+                     { id: "name_on_card_#{payment_method.id}",
+                       :"data-openpay-card" => 'holder_name' } %>
+</p>
+
+<p class="field" data-hook="card_number">
+  <%= label_tag "card_number", Spree.t(:card_number) %><span class="required">*</span><br />
+  <% options_hash = Rails.env.production? ? {autocomplete: 'off'} : {} %>
+  <%= text_field_tag "#{param_prefix}[number]",
+                     '',
+                     options_hash.merge(:id => 'card_number',
+                                        class: 'required',
+                                        size: 19,
+                                        maxlength: 19,
+                                        autocomplete: "off",
+                                        :"data-openpay-card" => 'card_number') %>
+  &nbsp;
+  <span id="card_type" style="display:none;">
+    ( <span id="looks_like" ><%= Spree.t(:card_type_is) %> <span id="type"></span></span>
+      <span id="unrecognized"><%= Spree.t(:unrecognized_card_type) %></span>
+    )
+  </span>
+</p>
+
+<p class="field" data-hook="card_expiration">
+  <%= label_tag "card_month", Spree.t(:expiration) %><span class="required">*</span><br />
+  <%= select_month(Date.today,
+                   { prefix: param_prefix, field_name: 'month', use_month_numbers: true },
+                   class: 'required',
+                   id: "card_month_#{param_prefix[15]}",
+                   :"data-openpay-card" => 'expiration_month') %>
+
+  <%#= select_year(Date.today,
+                  { prefix: param_prefix, field_name: 'year', start_year: Date.today.year, end_year: Date.today.year + 15 },
+                  class: 'required',
+                  id: "card_year_#{param_prefix[15]}",
+                  :"data-openpay-card" => 'expiration_year') %>
+    <%= select_tag "card_year_#{param_prefix[15]}", 
+        options_for_select((Date.today.year..(Date.today.year + 15)).map {|m| [m, m % 100]}),
+        {:class => 'required', :name => "#{param_prefix}[year]", :"data-openpay-card" => 'expiration_year'} %>
+</p>
+
+<p class="field" data-hook="card_code">
+  <%= label_tag "card_code", Spree.t(:card_code) %><span class="required">*</span><br />
+  <%= text_field_tag "#{param_prefix}[verification_value]",
+                     '',
+                     options_hash.merge(id: 'card_code',
+                                        class: 'required cardCode',
+                                        size: 5,
+                                        :"data-openpay-card" => 'cvv2') %>
+  <%= link_to "(#{Spree.t(:what_is_this)})", spree.cvv_path, target: '_blank', "data-hook" => "cvv_link", id: "cvv_link" %>
+</p>
+
+<% if payment_method.with_installments? %>
+  <p class="field">
+    <%= label_tag "installments_number_#{payment_method.id}", t('conekta.installments_number') %>
+    <%= select_tag "#{param_prefix}[installments_number]", options_for_select(Spree::Conekta.configuration.installment_options, Spree::Conekta.configuration.installment_default), data: { conekta: 'monthly_installments' } %>
+  </p>
+<% end %>
+
+<%= hidden_field_tag "#{param_prefix}[conekta_response]", '', :id => "conekta_response" %>
+<%= hidden_field_tag "#{param_prefix}[gateway_payment_profile_id]", '', :id => "gateway_payment_profile_id" %>
+
+<div class="sctn-row">
+    <a class="button rght" id="pay-button">Pagar</a>
+</div>
+
+<script type="text/javascript"
+        src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script type="text/javascript"
+        src="https://openpay.s3.amazonaws.com/openpay.v1.min.js"></script>
+<script type='text/javascript'
+  src="https://openpay.s3.amazonaws.com/openpay-data.v1.min.js"></script>
+<script type="text/javascript" >
+    $(document).ready(function() {
+        OpenPay.setId('<%= ENV['OPENPAY_ID'] %>');
+        OpenPay.setApiKey('<%= payment_method.preferred_public_auth_token -%>');
+        OpenPay.setSandboxMode(true);
+        
+        //You can put this in any step of the checkout
+        var deviceSessionId = OpenPay.deviceData.setup("checkout_form_payment", "deviceIdHiddenFieldName");
+    });
+    
+    var success_callbak = function(response) {
+        var token_id = response.data.id;
+        //$('#token_id').val(token_id);
+        $('#gateway_payment_profile_id').val(token_id);
+        $('#conekta_response').val(JSON.stringify(response));
+        $('#checkout_form_payment').submit();
+    };
+    
+    var error_callbak = function(response) {
+        var desc = response.data.description != undefined ?
+        response.data.description : response.message;
+        alert("ERROR [" + response.status + "] " + desc);
+        $("#pay-button").prop("disabled", false);
+    };
+    
+    $('#pay-button').on('click', function(event) {
+        event.preventDefault();
+        $("#pay-button").prop( "disabled", true);
+        OpenPay.token.extractFormAndCreate('checkout_form_payment', success_callbak, error_callbak);
+    });
+</script>
+
+<script type="text/javascript">
+    /*$(function() {
+        Conekta.setPublishableKey('<%= payment_method.preferred_public_auth_token -%>');
+    });*/
+</script>

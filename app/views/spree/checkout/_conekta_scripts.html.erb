@@ -1,0 +1,20 @@
+<% unless Rails.env.test? %>
+    <script type="text/javascript">
+        $(function() {
+            $('#card_month').on('change', function(e){
+                $('#conekta_month').val($(this).val());
+            });
+
+            $('#card_year').on('change', function(e){
+                $('#conekta_year').val($(this).val());
+            });
+
+            var gatewayOptions = JSON.parse('<%= escape_javascript Rabl.render(@order,
+                                                     'spree/openpay/gateway_options',
+                                                     view_path: File.expand_path('app/views', SpreeOpenpay::Engine.root),
+                                                     format: :json).html_safe %>');
+
+            spreeConekta = new Spree.Conekta($('#checkout_form_payment'), gatewayOptions);
+        });
+    </script>
+<% end %>

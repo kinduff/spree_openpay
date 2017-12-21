@@ -1,0 +1,64 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.conekta.io/charges
+    body:
+      encoding: UTF-8
+      string: '{"amount":200000,"reference_id":"R577145641-WRXQPNCU","currency":"MXN","description":"R577145641-WRXQPNCU","details":{"name":"John
+        Doe","email":"spree@example.com","phone":"123-456-7890","billing_address":{"email":"spree@example.com","street1":"10
+        Lovely Street","street2":"Northwest","city":"Herndon","state":"AL","country":"US","zip":"20170"},"line_items":[{"name":"Product
+        #5 - 3774","description":"Repellendus eum repudiandae vitae omnis quia. Aspernatur
+        error iure mollitia assumenda. Ex consequatur dolor explicabo praesentium.\nVelit
+        rerum ducimus iure error. Non eum est cumque autem omnis quia earum. Quia
+        eligendi ut et alias eos voluptate rerum dolores.\nDolores sed quidem quos
+        tenetur dolore laborum accusantium sunt. Nulla alias pariatur debitis laudantium.
+        Tenetur necessitatibus voluptas quis similique iusto itaque. Animi et consequatur
+        excepturi error velit totam.","sku":"9ea7e1f2b5cb2d20032a46e6688e905e","unit_price":"19.99"}],"shipment":{"price":"0.0","address":{"street1":"10
+        Lovely Street","street2":"Northwest","city":"Herndon","state":"AL","country":"US","zip":"20170"}}},"card":"test_tok_card_declined","monthly_installments":null}'
+    headers:
+      Accept:
+      - ' application/vnd.conekta-v0.3.0+json'
+      Content-type:
+      - ' application/json'
+      Authorization:
+      - Basic MXR2NXlKcDN4blZaN2VLNjdtNGg6
+      User-Agent:
+      - Faraday v0.8.9
+  response:
+    status:
+      code: 404
+      message: 
+    headers:
+      HTTP/1.1 404 Not Found: []
+      Cache-Control:
+      - no-cache
+      Conekta-Media-Type:
+      - conekta-v0.3.0; format=json
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Thu, 20 Feb 2014 17:59:29 GMT
+      Server:
+      - nginx/1.1.19
+      Status:
+      - 404 Not Found
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      X-Rack-Cache:
+      - invalidate, pass
+      X-Request-Id:
+      - 3f8b45116556074d7ae18682e8032340
+      X-Runtime:
+      - '0.035006'
+      Content-Length:
+      - '109'
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: '{"object":"error","type":"resource_not_found","message":"Token ''test_tok_card_declined''
+        could not be found."}'
+    http_version: 
+  recorded_at: Thu, 20 Feb 2014 17:59:09 GMT
+recorded_with: VCR 2.8.0

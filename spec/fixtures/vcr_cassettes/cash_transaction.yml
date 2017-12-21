@@ -1,0 +1,54 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.conekta.io/charges
+    body:
+      encoding: UTF-8
+      string: '{"amount":10000,"reference_id":"foo123","currency":"MXN","description":"foo123","monthly_installments":null,"details":{"name":null,"email":null,"phone":null,"billing_address":{"email":null,"street1":null,"street2":null,"city":null,"state":null,"country":null,"zip":null},"line_items":[{"name":"foo","description":"var"}],"shipment":{"price":null,"address":{"street1":null,"street2":null,"city":null,"state":null,"country":null,"zip":null}}},"cash":{"type":"oxxo"}}'
+    headers:
+      Accept:
+      - ' application/vnd.conekta-v0.3.0+json'
+      Content-type:
+      - ' application/json'
+      Authorization:
+      - Basic MXR2NXlKcDN4blZaN2VLNjdtNGg6
+      User-Agent:
+      - Faraday v0.8.9
+  response:
+    status:
+      code: 200
+      message: 
+    headers:
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Conekta-Media-Type:
+      - conekta-v0.3.0; format=json
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Tue, 04 Feb 2014 22:51:02 GMT
+      ETag:
+      - '"2b4297d98188d2850198aeb1c9a8f8a7"'
+      Server:
+      - nginx/1.1.19
+      Status:
+      - 200 OK
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      X-Rack-Cache:
+      - invalidate, pass
+      X-Request-Id:
+      - aed06813e2ba9fe9cf24729078ac69c1
+      X-Runtime:
+      - '0.137736'
+      transfer-encoding:
+      - chunked
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: '{"id":"52f16ed6d7e1a08d5500072c","livemode":false,"created_at":1391554262,"status":"pending_payment","currency":"MXN","description":"foo123","reference_id":"foo123","failure_code":null,"failure_message":null,"monthly_installments":null,"object":"charge","amount":10000,"fee":1496,"refunds":[],"payment_method":{"expiry_date":"040314","barcode":"38100000000042290121213001160013","barcode_url":"https://www2.oxxo.com:8443/HTP/barcode/genbc?data=38100000000042290121213001160013&height=50&width=1&type=Code128","object":"cash_payment","type":"oxxo","expires_at":1393891200},"details":{"name":null,"phone":null,"email":null,"line_items":[{"name":"foo","description":"var","unit_price":0,"quantity":null,"sku":null,"category":null}],"billing_address":{"street1":null,"street2":null,"street3":null,"city":null,"state":null,"zip":null,"country":null,"tax_id":null,"company_name":null,"phone":null,"email":null},"shipment":{"carrier":null,"service":null,"tracking_id":null,"price":null,"address":{"street1":null,"street2":null,"street3":null,"city":null,"state":null,"zip":null,"country":null}}}}'
+    http_version: 
+  recorded_at: Tue, 04 Feb 2014 22:50:46 GMT
+recorded_with: VCR 2.8.0
