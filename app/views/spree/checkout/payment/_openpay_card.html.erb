@@ -80,7 +80,7 @@
   src="https://openpay.s3.amazonaws.com/openpay-data.v1.min.js"></script>
 <script type="text/javascript" >
     $(document).ready(function() {
-        OpenPay.setId('<%= ENV['OPENPAY_ID'] %>');
+        OpenPay.setId('<%= payment_method.preferred_openpay_id %>');
         OpenPay.setApiKey('<%= payment_method.preferred_public_auth_token -%>');
         OpenPay.setSandboxMode(true);
         

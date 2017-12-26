@@ -6,11 +6,12 @@ en:
     cash:
       bar_code: Barcode
       next_step: Next step
-      payment_message: Print this form and take it to the nearest OXXO to make your payment.
-      payment_title: Payment through OXXO
+      payment_message: Print this form and take it to the nearest store to make your payment.
+      payment_title: Payment through Paynet
       print_payment_form: Print payment form
       title: Payment information
       total: Total
+      payment_bill: Download Payment Bill 
     bank:
       payment_title: Banorte deposit
       service_number: Service Number

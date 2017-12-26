@@ -17,7 +17,7 @@ module Spree
     
     def completion_route
       if @order.payments.present? && conekta_payment?(@order.payments.last.payment_method)
-         conekta_payment_path(@order)
+         openpay_payment_path(@order)
       else
         spree.order_path(@order)
       end

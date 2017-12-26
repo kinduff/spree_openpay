@@ -1,12 +1,17 @@
 Spree::OrdersController.class_eval do
     before_action :create_openpay_client, only: :update
     
-    CONEKTA_API = "https://sandbox-api.openpay.mx/v1/#{ENV['OPENPAY_ID']}/"
-    
-    attr_accessor :auth_token
+    attr_accessor :auth_token, :openpay_id
+     
+    CONEKTA_API = "https://sandbox-api.openpay.mx/v1/"
     
     def create_openpay_client
         order_user = @order.user
+        
+        if order_user.nil?
+            puts "Cannot create user in Openpay, user not defined in order"
+            return
+        end
         
         #We create the client via faraday in openpay if the openpay id is not defined
         if order_user.openpay_id.nil?
@@ -15,6 +20,8 @@ Spree::OrdersController.class_eval do
             #If the Payment Method is not defined we can not create the user without the private key
             unless openpay_card_method.nil?
                 @auth_token = openpay_card_method.preferred_auth_token
+                @openpay_id = openpay_card_method.preferred_openpay_id
+                
                 bill_address = @order.bill_address
                 
                 if bill_address.nil?
@@ -45,13 +52,21 @@ Spree::OrdersController.class_eval do
                 else    
                     puts "Error when trying to connect to openpay server"
                     puts response['description']
+                    
+                    flash[:error] = "Openpay error: #{response['description']}"
+                    redirect_to cart_path
+                    return
                 end
+            else
+                flash[:error] = "Openpay error: No openpay ID or auth token found"
+                redirect_to cart_path
+                return
             end
         end
     end
     
     def connection
-        Faraday.new(url: CONEKTA_API) do |faraday|
+        Faraday.new(url: CONEKTA_API + merchant_id + "/") do |faraday|
             faraday.request :url_encoded
 
             faraday.headers = headers
@@ -68,5 +83,9 @@ Spree::OrdersController.class_eval do
 
     def endpoint
         "customers"
+    end
+    
+    def merchant_id
+      return @openpay_id
     end
 end

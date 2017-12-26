@@ -3,9 +3,10 @@ module Spree
     preference :auth_token, :string
     preference :public_auth_token, :string
     preference :source_method, :string, default: 'card'
+    preference :openpay_id, :string
 
     unless Rails::VERSION::MAJOR == 4
-      attr_accessible :preferred_auth_token, :preferred_public_auth_token, :preferred_source_method, :gateway_response
+      attr_accessible :preferred_auth_token, :preferred_public_auth_token, :preferred_source_method, :gateway_response, :preferred_openpay_id
     end
 
     def provider_class
