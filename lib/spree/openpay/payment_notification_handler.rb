@@ -7,13 +7,13 @@ module Spree
 
       attr_reader :params, :action, :order, :delay
 
-      ACTIONS = Hash.new(:failure!).merge! 'charge.paid' => :capture!
+      ACTIONS = Hash.new(:failure!).merge! 'charge.succeeded' => :capture!
 
       def initialize(params, delay = 60)
         @params = params
         @delay  = delay
         @action = ACTIONS[params['type']]
-        @order  = params['data']['object']['reference_id'].split('-').first
+        @order  = params['transaction']['order_id'].split('-').first
       end
 
       def perform_action

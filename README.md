@@ -37,35 +37,35 @@ On the spree application admin side go to:
     On the public auth token field, add your Openpay public private key.
     
     On the openpay field, add your Openpay Merchant ID.
-    
+
+**Important Note:** If the payment method's test mode is active, then you will be using the sandbox testing URL for Openpay.
+
 ###Source Methods
 
 Spree Openpay currently supports four different methods:
 
 ####Card
 >Card method will let you pay using your credit or debit card. More info: More info: [Openpay Card](https://www.openpay.mx/docs/save-card.html)
+**Important Note:** At least you need to create this payment method.
 
 ####Cash
->Cash method will generate a bar code with the order information so you'll be able to take it to your nearest OXXO store to pay it. More info: [Conekta Cash](https://www.conekta.io/es/docs/tutoriales/pagos-en-efectivo)
+>Cash method will generate a bar code with the order information so you'll be able to take it to your nearest Paynet store to pay it. More info: [Openpay Cash](https://www.openpay.mx/docs/store-charge.html)
 
 ####Bank
->Bank method will let you generate a deposit or transfer reference. More info: [Conekta Bank](https://www.conekta.io/es/docs/tutoriales/pago-con-transferencia)
+>Bank method will let you generate a deposit or transfer reference.
 
 ####Monthly Payment
->This method will let you pay using your credit card with a monthly payment schema. More info: [Conekta Monthly Payments](https://admin.conekta.io/es/docs/tutoriales/meses-sin-intereses)
-You can configurate the options for number of installements and default creating an initializer in your app and writing code as this example:
-```ruby
-  Spree::Conekta.configure do |config|
-    config.installment_options = [3] # [3, 6] , [3, 6, 12]
-    config.installment_default = 3 # 6 12
-  end
-```
+>This method will let you pay using your credit card with a monthly payment schema.
 
 **Important Note:** If you want to support all source methods, you'll need to create a payment method for each one.
 
 **Important Note:** This extension only works with ruby 2.0+.
 
-**Important Note:** Openpay only supports Credit Cards Payments.
+**Important Note:** Openpay only supports Credit Cards and Cash Payments.
+
+**Important Note:** Openpay customers will be created after the first checkout's step.
+
+**Important Note:** Only Openpay total refunds available.
 
 # About the Author
 

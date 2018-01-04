@@ -10,7 +10,7 @@ module Spree::Openpay
     end
 
     def authorize(amount, source, gateway_options = {})
-      Response.new(parse_conekta_response(source.conekta_response), gateway_options)
+      Response.new(parse_openpay_response(source.openpay_response), gateway_options)
     end
 
     def capture(amount, source, gateway_options = {})
@@ -19,7 +19,7 @@ module Spree::Openpay
 
     private
 
-    def parse_conekta_response(response)
+    def parse_openpay_response(response)
       Oj.load response || '{}'
     end
   end

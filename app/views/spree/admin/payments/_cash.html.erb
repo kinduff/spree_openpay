@@ -1,17 +1,17 @@
 <%- @order_details = @order.last_payment_details.params %>
 
-<table class='print' id='conekta_cash'>
+<table class='print' id='openpay_cash'>
   <thead>
     <tr>
-      <th class='title' colspan='2'> <%= t('conekta.order_number', number: @order.number) %> </th>
+      <th class='title' colspan='2'> <%= t('openpay.order_number', number: @order.number) %> </th>
     </tr>
     <tr>
-      <th> <%= t('conekta.cash.bar_code') %> </th>
+      <th> <%= t('openpay.cash.bar_code') %> </th>
     </tr>
   </thead>
   <tfoot>
     <tr>
-      <td colspan='2'> <%= raw t('conekta.cash.payment_message') %> </td>
+      <td colspan='2'> <%= raw t('openpay.cash.payment_message') %> </td>
     </tr>
   </tfoot>
   <tbody>
@@ -24,6 +24,6 @@
   </tbody>
 </table>
 
-<a id='pbutton' href='#' class='icon-print' onclick='printDoc("#conekta_cash")'>
-  <%= t('conekta.cash.print_payment_form') %>
+<a id='pbutton' href='#' class='icon-print' onclick='printDoc("#openpay_cash")'>
+  <%= t('openpay.cash.print_payment_form') %>
 </a>

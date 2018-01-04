@@ -1,18 +1,18 @@
 <%- @order_details = @order.last_payment_details.params %>
 
-<table class='print' id='conekta_bank'>
+<table class='print' id='openpay_bank'>
   <thead>
     <tr>
-      <th class='title' colspan='2'> <%= t('conekta.order_number', number: @order.number) %> </th>
+      <th class='title' colspan='2'> <%= t('openpay.order_number', number: @order.number) %> </th>
     </tr>
     <tr>
-      <th> <%= t('conekta.bank.service_number') %> </th>
-      <th> <%= t('conekta.bank.reference') %> </th>
+      <th> <%= t('openpay.bank.service_number') %> </th>
+      <th> <%= t('openpay.bank.reference') %> </th>
     </tr>
   </thead>
   <tfoot>
     <tr>
-      <td colspan='2'> <%= raw t('conekta.bank.payment_message') %> </td>
+      <td colspan='2'> <%= raw t('openpay.bank.payment_message') %> </td>
     </tr>
   </tfoot>
   <tbody>
@@ -21,12 +21,12 @@
       <td class='align-center'> <%= @order_details['bank']['reference'] %> </td>
     </tr>
     <tr>
-      <td class='align-right'> <%= t('conekta.total') %> </td>
+      <td class='align-right'> <%= t('openpay.total') %> </td>
       <td class='align-center'><%= money(@order.total) %></td>
     </tr>
   </tbody>
 </table>
 
-<a id='pbutton' href='#' class='icon-print' onclick='printDoc("#conekta_bank")'>
-  <%= t('conekta.cash.print_payment_form') %>
+<a id='pbutton' href='#' class='icon-print' onclick='printDoc("#openpay_bank")'>
+  <%= t('openpay.cash.print_payment_form') %>
 </a>

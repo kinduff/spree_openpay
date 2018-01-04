@@ -1,15 +1,15 @@
 <section id='order-payment'>
   <header class='order-title'>
     <div class='logos'>
-      <img class='conekta-brand' src='https://www.openpay.mx/img/logo.png' alt='Conekta'></img>
+      <img class='openpay-brand' src='https://www.openpay.mx/img/logo.png' alt='Openpay'></img>
     </div>
-    <h2 class='payment-title'><%= t('conekta.title') %></h2>
+    <h2 class='payment-title'><%= t('openpay.title') %></h2>
   </header>
   <div class='order-body'>
     <%= render partial: @order.last_payment_source %>
   </div>
   <footer class='order-footer'>
-    <%= button_tag t('conekta.print_payment_form'), id: 'print-payment', class: 'icon-print'  %>
+    <%= button_tag t('openpay.print_payment_form'), id: 'print-payment', class: 'icon-print'  %>
   </footer>
 </section>
 

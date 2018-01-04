@@ -1,7 +1,8 @@
 es-MX:
-  conekta:
+  openpay:
     additional_steps_warning: Pasos adicionales para completar su pago
     card:
+      payment: Presione aqui para el pago por Openpay
       processing_order: Procesando su pago espere un momento
     cash:
       bar_code: Código de barras

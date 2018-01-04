@@ -4,7 +4,7 @@ module Spree
     
     if Rails::VERSION::MAJOR >= 4
       before_action :permit_installments_number
-      before_action :permit_conekta_response
+      before_action :permit_openpay_response
     end
     
     def add_device_session
@@ -16,7 +16,7 @@ module Spree
     end
     
     def completion_route
-      if @order.payments.present? && conekta_payment?(@order.payments.last.payment_method)
+      if @order.payments.present? && openpay_payment?(@order.payments.last.payment_method)
          openpay_payment_path(@order)
       else
         spree.order_path(@order)
@@ -25,7 +25,7 @@ module Spree
 
     private
 
-    def conekta_payment?(payment_method)
+    def openpay_payment?(payment_method)
         [Spree::BillingIntegration::OpenpayGateway::Bank, Spree::BillingIntegration::OpenpayGateway::Cash].include? payment_method.class
     end
 
@@ -33,8 +33,8 @@ module Spree
       permitted_source_attributes << :installments_number
     end
 
-    def permit_conekta_response
-      permitted_source_attributes << :conekta_response
+    def permit_openpay_response
+      permitted_source_attributes << :openpay_response
     end
   end
 end

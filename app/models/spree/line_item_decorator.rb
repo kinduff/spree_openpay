@@ -1,5 +1,5 @@
 Spree::LineItem.class_eval do
-  def to_conekta
+  def to_openpay
     {
       'name'        => variant.name,
       'description' => variant.description,

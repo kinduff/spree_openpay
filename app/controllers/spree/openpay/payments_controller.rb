@@ -9,8 +9,7 @@ module Spree::Openpay
     end
 
     def create
-      binding.pry
-      PaymentNotificationHandler.new(params).perform_action if params['type'] == 'charge.paid'
+      PaymentNotificationHandler.new(params).perform_action if params['type'] == 'charge.succeeded'
       render nothing: true
     end
   end

@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.version     = SpreeOpenpay::VERSION
   s.authors     = ['Jonathan Garay', 'Fernando Barajas', 'Manuel Vidaurre', 'AngelChaos26']
   s.email       = %w(jonathan.garay@crowdint.com fernando.barajas@crowdint.com manuel.vidaurre@agiltec.com.mx)
-  s.homepage    = 'http://github.com/crowdint/spree_conekta'
+  s.homepage    = 'https://github.com/elliotmx'
   s.summary     = 'Spree Engine for Openpay Mexican Payment gateway'
   s.description = 'Spree Engine for Openpay Mexican Payment gateway'
 

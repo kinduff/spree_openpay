@@ -1,10 +1,8 @@
 Spree::OrdersController.class_eval do
     before_action :create_openpay_client, only: :update
     
-    attr_accessor :auth_token, :openpay_id
+    attr_accessor :openpay_api, :auth_token, :openpay_id
      
-    CONEKTA_API = "https://sandbox-api.openpay.mx/v1/"
-    
     def create_openpay_client
         order_user = @order.user
         
@@ -19,6 +17,7 @@ Spree::OrdersController.class_eval do
             
             #If the Payment Method is not defined we can not create the user without the private key
             unless openpay_card_method.nil?
+                @openpay_api = openpay_card_method.preferred_test_mode
                 @auth_token = openpay_card_method.preferred_auth_token
                 @openpay_id = openpay_card_method.preferred_openpay_id
                 
@@ -66,7 +65,7 @@ Spree::OrdersController.class_eval do
     end
     
     def connection
-        Faraday.new(url: CONEKTA_API + merchant_id + "/") do |faraday|
+        Faraday.new(url: openpay_url + merchant_id + "/") do |faraday|
             faraday.request :url_encoded
 
             faraday.headers = headers
@@ -75,6 +74,14 @@ Spree::OrdersController.class_eval do
         end
     end
 
+    def openpay_url
+        if @openpay_api
+            "https://sandbox-api.openpay.mx/v1/"
+        else
+            "https://dev-api.openpay.mx/v1/"
+        end
+    end
+    
     def headers
         {
             'Content-type' => ' application/json'
@@ -86,6 +93,6 @@ Spree::OrdersController.class_eval do
     end
     
     def merchant_id
-      return @openpay_id
+        return @openpay_id
     end
 end

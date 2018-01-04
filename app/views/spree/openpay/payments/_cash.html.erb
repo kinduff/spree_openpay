@@ -1,18 +1,18 @@
-<img class='conekta-oxxo' src='https://webadictos.com/media/2013/06/paynet-logo.jpg'></img>
-<h1 id='oxxo-title'><%= t("conekta.cash.payment_title") %></h1>
+<img class='openpay-paynet' src='https://webadictos.com/media/2013/06/paynet-logo.jpg'></img>
+<h1 id='paynet-title'><%= t("openpay.cash.payment_title") %></h1>
 
-<table id='conekta_cash' class='payment-information'>
+<table id='openpay_cash' class='payment-information'>
   <thead>
     <tr>
-      <th colspan='2'> <%= t('conekta.order_number', number: @order.number) %> </th>
+      <th colspan='2'> <%= t('openpay.order_number', number: @order.number) %> </th>
     </tr>
     <tr>
-      <th colspan='2'> <%= t('conekta.cash.bar_code') %> </th>
+      <th colspan='2'> <%= t('openpay.cash.bar_code') %> </th>
     </tr>
   </thead>
   <tfoot>
     <tr>
-      <td colspan='2'> <%= raw t('conekta.cash.payment_message') %> </td>
+      <td colspan='2'> <%= raw t('openpay.cash.payment_message') %> </td>
     </tr>
   </tfoot>
   <tbody>
@@ -20,18 +20,19 @@
       <td class='align-center' id='barcode'>
         <%= image_tag(@order_details['payment_method']['barcode_url']) %>
         <div><%= @order_details['payment_method']['barcode'] %></div>
+        <% openpay_api = @order.payments.valid.last.payment_method.preferred_test_mode ? "https://sandbox-dashboard.openpay.mx" : "https://dev-api.openpay.mx" %>
         <% merchant_id = @order.payments.valid.last.payment_method.preferred_openpay_id %>
-        <div><%= link_to t('conekta.cash.payment_bill'), "https://sandbox-dashboard.openpay.mx/paynet-pdf/#{merchant_id}/#{@order_details['payment_method']['reference']}", target: '_blank' %></div>
+        <div><%= link_to t('openpay.cash.payment_bill'), "#{openpay_api}/paynet-pdf/#{merchant_id}/#{@order_details['payment_method']['reference']}", target: '_blank' %></div>
       </td>
     </tr>
     <tr>
       <td class='align-right'>
-        <b><%= t('conekta.total') %></b>
+        <b><%= t('openpay.total') %></b>
         <% if @order.currency != 'MXN' %>
           <%= Spree::Openpay::Exchange.new(@order.total, @order.currency).amount_exchanged  %> MXN
         <% else %>
           <%= @order.display_total.to_html%>
-        <% end%>
+        <% end %>
       </td>
     </tr>
   </tbody>

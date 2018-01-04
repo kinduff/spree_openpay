@@ -2,7 +2,7 @@ module Spree::Openpay
   class Provider
     include Spree::Openpay::Client
 
-    attr_accessor :auth_token, :source_method, :openpay_id, :customer_id, :end_point
+    attr_accessor :openpay_api, :auth_token, :source_method, :openpay_id, :customer_id, :end_point
 
     attr_reader :options
 
@@ -14,6 +14,7 @@ module Spree::Openpay
 
     def initialize(options = {})
       @options       = options
+      @openpay_api   = options[:test_mode]
       @auth_token    = options[:auth_token]
       @openpay_id    = options[:openpay_id]
       @source_method = payment_processor(options[:source_method])
@@ -55,6 +56,14 @@ module Spree::Openpay
       Response.new({}, gateway_options)
     end
 
+    def openpay_url
+      if @openpay_api
+        "https://sandbox-api.openpay.mx/v1/"
+      else
+        "https://dev-api.openpay.mx/v1/"
+      end
+    end
+        
     def endpoint
       return @end_point
     end
@@ -188,7 +197,7 @@ module Spree::Openpay
 
     def line_items(gateway_params)
       order = Spree::Order.find_by_number(gateway_params[:order_id].split('-').first)
-      order.line_items.map(&:to_conekta)
+      order.line_items.map(&:to_openpay)
     end
 
     def shipment(gateway_params)
@@ -206,7 +215,7 @@ module Spree::Openpay
     end
     
     def build_common_to_cash(amount, gateway_params, amount_money)
-      #Check this conekta fuction later
+      #Check this fuction later
       amount_exchanged = Spree::Openpay::Exchange.new(amount_money, gateway_params[:currency]).amount_exchanged
       # {
       #   'amount' => amount_exchanged,

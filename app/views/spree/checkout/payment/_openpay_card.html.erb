@@ -60,16 +60,16 @@
 
 <% if payment_method.with_installments? %>
   <p class="field">
-    <%= label_tag "installments_number_#{payment_method.id}", t('conekta.installments_number') %>
+    <%= label_tag "installments_number_#{payment_method.id}", t('openpay.installments_number') %>
     <%= select_tag "#{param_prefix}[installments_number]", options_for_select(Spree::Conekta.configuration.installment_options, Spree::Conekta.configuration.installment_default), data: { conekta: 'monthly_installments' } %>
   </p>
 <% end %>
 
-<%= hidden_field_tag "#{param_prefix}[conekta_response]", '', :id => "conekta_response" %>
+<%= hidden_field_tag "#{param_prefix}[openpay_response]", '', :id => "openpay_response" %>
 <%= hidden_field_tag "#{param_prefix}[gateway_payment_profile_id]", '', :id => "gateway_payment_profile_id" %>
 
 <div class="sctn-row">
-    <a class="button rght" id="pay-button">Pagar</a>
+    <a class="btn btn-success" id="pay-button"><%= t('openpay.card.payment') %></a>
 </div>
 
 <script type="text/javascript"
@@ -82,7 +82,11 @@
     $(document).ready(function() {
         OpenPay.setId('<%= payment_method.preferred_openpay_id %>');
         OpenPay.setApiKey('<%= payment_method.preferred_public_auth_token -%>');
-        OpenPay.setSandboxMode(true);
+        
+        //If it is in test mode then we use the sandbox mode for openpay
+        <% if payment_method.preferred_test_mode %>
+            OpenPay.setSandboxMode(true);
+        <% end %>
         
         //You can put this in any step of the checkout
         var deviceSessionId = OpenPay.deviceData.setup("checkout_form_payment", "deviceIdHiddenFieldName");
@@ -92,7 +96,7 @@
         var token_id = response.data.id;
         //$('#token_id').val(token_id);
         $('#gateway_payment_profile_id').val(token_id);
-        $('#conekta_response').val(JSON.stringify(response));
+        $('#openpay_response').val(JSON.stringify(response));
         $('#checkout_form_payment').submit();
     };
     
@@ -108,10 +112,4 @@
         $("#pay-button").prop( "disabled", true);
         OpenPay.token.extractFormAndCreate('checkout_form_payment', success_callbak, error_callbak);
     });
-</script>
-
-<script type="text/javascript">
-    /*$(function() {
-        Conekta.setPublishableKey('<%= payment_method.preferred_public_auth_token -%>');
-    });*/
 </script>

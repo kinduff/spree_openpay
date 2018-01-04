@@ -59,4 +59,4 @@ jQuery ->
 
     saveConektaResponse: (response)->
       @form.find("input[name='payment_source[#{@currentMethod}][gateway_payment_profile_id]']").val(response.id)
-      @form.find("input[name='payment_source[#{@currentMethod}][conekta_response]']").val(JSON.stringify(response))
+      @form.find("input[name='payment_source[#{@currentMethod}][openpay_response]']").val(JSON.stringify(response))

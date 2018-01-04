@@ -2,9 +2,6 @@ module Spree::Openpay
   module Client
     attr_accessor :auth_token
     
-    #CONEKTA_API = 'https://api.conekta.io/'
-    CONEKTA_API = "https://sandbox-api.openpay.mx/v1/"
-
     def post(params)
       Oj.load connection.post(endpoint, Oj.dump(params)).body
     end
@@ -14,7 +11,7 @@ module Spree::Openpay
     end
 
     def connection
-      Faraday.new(url: CONEKTA_API + merchant_id + "/") do |faraday|
+      Faraday.new(url: openpay_url + merchant_id + "/") do |faraday|
         faraday.request :url_encoded
 
         faraday.headers = headers
@@ -22,10 +19,13 @@ module Spree::Openpay
         faraday.basic_auth(auth_token, nil)
       end
     end
-
+  
+    def openpay_url
+      raise 'Not Implemented'
+    end
+    
     def headers
       {
-        #'Accept' => ' application/vnd.conekta-v0.3.0+json',
         'Content-type' => ' application/json'
       }
     end

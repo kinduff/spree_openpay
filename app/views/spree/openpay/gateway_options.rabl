@@ -21,7 +21,7 @@ node :details do |order|
         zip:     order.bill_address.zipcode
       },
 
-      line_items: order.line_items.map(&:to_conekta),
+      line_items: order.line_items.map(&:to_openpay),
 
       shipment: {
         price: order.shipments.sum(:cost),

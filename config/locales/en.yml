@@ -1,7 +1,8 @@
 en:
-  conekta:
+  openpay:
     additional_steps_warning: Additional steps to complete your payment
     card:
+      payment: Click here for Openpay Payment
       processing_order: Processing order please wait
     cash:
       bar_code: Barcode

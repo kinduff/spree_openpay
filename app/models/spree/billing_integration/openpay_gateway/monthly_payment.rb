@@ -30,7 +30,7 @@ module Spree
     end
 
     def method_type
-      'conekta_card'
+      'openpay_card'
     end
   end
 end
