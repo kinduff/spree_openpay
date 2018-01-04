@@ -34,7 +34,7 @@ On the spree application admin side go to:
 
     On the auth token field, add your Openpay private key.
 
-    On the public auth token field, add your Openpay public private key.
+    On the public auth token field, add your Openpay public private key. (Openpay Card Only)
     
     On the openpay field, add your Openpay Merchant ID.
 
