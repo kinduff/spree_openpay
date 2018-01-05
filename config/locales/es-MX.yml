@@ -1,0 +1,23 @@
+es-MX:
+  openpay:
+    additional_steps_warning: Pasos adicionales para completar su pago
+    card:
+      payment: Presione aqui para el pago por Openpay
+      processing_order: Procesando su pago espere un momento
+    cash:
+      bar_code: Código de barras
+      payment_message: Imprime este formulario y preséntalo en la tienda mas cercana para realizar tu pago.
+      payment_title: Pago a través de Paynet
+      total: Total
+      payment_bill: Descargar Recibo Pago
+    bank:
+      payment_title: Depósito en ventanilla Banorte
+      service_number: Número de servicio
+      reference: Referencia
+      payment_message: 'Presente este número de referencia en cualquier sucursal: <strong> Banorte </strong>'
+    title: Información de pago
+    next_step: Siguiente paso
+    order_number: 'Número de orden: %{number}'
+    print_payment_form: Imprimir ficha de pago
+    total: 'Total a pagar:'
+    installments_number: 'Meses sin intereses'
