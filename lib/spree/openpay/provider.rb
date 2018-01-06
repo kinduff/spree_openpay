@@ -100,7 +100,9 @@ module Spree::Openpay
       amount_money = order.total.to_f
       
       if source_method == Spree::Openpay::PaymentSource::Cash && gateway_params[:currency] != 'MXN'
-        return build_common_to_cash(amount, gateway_params, amount_money) 
+        return build_common_to_cash(amount, gateway_params, amount_money, true) 
+      elsif source_method == Spree::Openpay::PaymentSource::Cash && gateway_params[:currency] == 'MXN'
+        return build_common_to_cash(amount, gateway_params, amount_money, false)
       else
         # {
         #   'amount'               => amount,
@@ -214,9 +216,14 @@ module Spree::Openpay
       }
     end
     
-    def build_common_to_cash(amount, gateway_params, amount_money)
-      #Check this fuction later
-      amount_exchanged = Spree::Openpay::Exchange.new(amount_money, gateway_params[:currency]).amount_exchanged
+    def build_common_to_cash(amount, gateway_params, amount_money, exchange)
+      #If exchange is true, then we make the exchange to MXN currency
+      if exchange
+        #Check this fuction later
+        amount_exchanged = Spree::Openpay::Exchange.new(amount_money, gateway_params[:currency]).amount_exchanged
+      else
+        amount_exchanged = amount_money
+      end
       # {
       #   'amount' => amount_exchanged,
       #   'reference_id' => gateway_params[:order_id],
