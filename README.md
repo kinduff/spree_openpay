@@ -4,7 +4,7 @@ Spree Openpay
 Add spree_openpay to your Gemfile:
 
 ```ruby
-gem 'spree_openpay', github: 'elliotmx/spree_openpay_premium', branch: 'master'
+gem 'spree_openpay', github: 'elliotmx/spree_openpay_full', branch: 'master'
 ```
 
 Then run:
@@ -27,10 +27,6 @@ On the spree application admin side go to:
      Spree::BillingIntegration::OpenpayGateway::Card
 
      Spree::BillingIntegration::OpenpayGateway::Cash
-
-     Spree::BillingIntegration::OpenpayGateway::Bank
-
-     Spree::BillingIntegration::OpenpayGateway::MonthlyPayment
 
     On the auth token field, add your Openpay private key.
 
@@ -72,23 +68,5 @@ Spree Openpay currently supports four different methods:
 [ELLIOT](http://elliot.mx/)
 
 ## Contributors
-  * Jonathan Garay
-  * Fernando Cuauhtemoc Barajas Chavez
-  * Herman Moreno
-  * Edwin Cruz
-  * Carlos A. Muñiz Moreno
-  * Chalo Fernandez
-  * Guillermo Siliceo
-  * Jaime Victoria
-  * Jorge Pardiñas
-  * Juan Carlos Rojas
-  * Leo Fischer
-  * Manuel Vidaurre
-  * Marco Medina
-  * Mumo Carlos
-  * Sergio Morales
-  * Steven Barragan
-  * Ulices Barajas
-  * bishma-stornelli
-  * Raul Contreras Arredondo
-  * AngelChaos26
+    * * Raul Contreras Arredondo  
+    * * AngelChaos26
