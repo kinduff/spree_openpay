@@ -61,16 +61,12 @@
 <% if payment_method.with_installments? %>
   <p class="field">
     <%= label_tag "installments_number_#{payment_method.id}", t('openpay.installments_number') %>
-    <%= select_tag "#{param_prefix}[installments_number]", options_for_select(Spree::Conekta.configuration.installment_options, Spree::Conekta.configuration.installment_default), data: { conekta: 'monthly_installments' } %>
+    <%= select_tag "#{param_prefix}[installments_number]", options_for_select(Spree::Openpay.configuration.installment_options, Spree::Openpay.configuration.installment_default), :"data-openpay-card" => 'monthly_installments' %>
   </p>
 <% end %>
 
 <%= hidden_field_tag "#{param_prefix}[openpay_response]", '', :id => "openpay_response" %>
 <%= hidden_field_tag "#{param_prefix}[gateway_payment_profile_id]", '', :id => "gateway_payment_profile_id" %>
-
-<div class="sctn-row">
-    <a class="btn btn-success" id="pay-button"><%= t('openpay.card.payment') %></a>
-</div>
 
 <script type="text/javascript"
         src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
@@ -104,12 +100,6 @@
         var desc = response.data.description != undefined ?
         response.data.description : response.message;
         alert("ERROR [" + response.status + "] " + desc);
-        $("#pay-button").prop("disabled", false);
+        $("#payment_save_and_continue").prop("disabled", false);
     };
-    
-    $('#pay-button').on('click', function(event) {
-        event.preventDefault();
-        $("#pay-button").prop( "disabled", true);
-        OpenPay.token.extractFormAndCreate('checkout_form_payment', success_callbak, error_callbak);
-    });
 </script>

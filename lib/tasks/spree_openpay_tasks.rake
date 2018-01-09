@@ -1,4 +1,4 @@
 # desc "Explaining what the task does"
-# task :spree_conekta do
+# task :spree_openpay do
 #   # Task goes here
 # end

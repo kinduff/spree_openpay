@@ -1,6 +1,6 @@
-window.spreeConekta || (window.spreeConekta = {})
+window.spreeOpenpay || (window.spreeOpenpay = {})
 
-spreeConekta.Utils = (function(){
+spreeOpenpay.Utils = (function(){
   function Utils(args) {
     this.printable = args.printable;
     this.options = args.options;
@@ -27,7 +27,7 @@ spreeConekta.Utils = (function(){
 
 
 function printDoc(printable) {
-  printer = new spreeConekta.Utils({
+  printer = new spreeOpenpay.Utils({
     printable: $(printable),
     options: { loadCSS: "<%= asset_path('spree/backend/print.css.sass') %>" }
   });

@@ -1,9 +1,8 @@
-# require conekta
 #= require_tree .
 #= require_self
 
 jQuery ->
-  class Spree.Conekta
+  class Spree.Openpay
     currentMethod: null
 
     constructor: (@form, @gatewayOptions)->
@@ -16,23 +15,23 @@ jQuery ->
       @form.on 'submit', (e)=>
         e.preventDefault()
         currentForm = @form
-        if @isConektaForm(currentForm)
+        if @isOpenpayForm(currentForm)
           @processPayment(currentForm)
         else
           @submitForm()
 
-    isConektaForm: (form)->
-      $('input', form).is("[data-conekta='card[name]']")
+    isOpenpayForm: (form)->
+      $('input', form).is("[data-openpay-card='card[name]']")
 
     generateToken: (form)->
-      window.Conekta.token.create(form, @successResponseHandler, @errorResponseHandler)
+      window.Openpay.token.create(form, @successResponseHandler, @errorResponseHandler)
 
     processPayment: (form)->
       @generateToken(form)
 
     processWithInstallments: (form)->
-      $.extend(@gatewayOptions, window.Conekta._helpers.parseForm(form))
-      window.Conekta.charge.create(@gatewayOptions, @successResponseHandler, @errorResponseHandler)
+      $.extend(@gatewayOptions, window.Openpay._helpers.parseForm(form))
+      window.Openpay.charge.create(@gatewayOptions, @successResponseHandler, @errorResponseHandler)
 
     cleanForm: ->
       form = @form.clone()
@@ -44,19 +43,19 @@ jQuery ->
         @currentMethod = e.target.value
 
     withInstallments: (form)->
-      $('select, input', form).is("[data-conekta='monthly_installments']")
+      $('select, input', form).is("[data-openpay-card='monthly_installments']")
 
     submitForm: ->
       @form.off('submit').submit()
 
     successResponseHandler: (response)=>
-      @saveConektaResponse(response)
+      @saveOpenpayResponse(response)
       @submitForm()
 
     errorResponseHandler: (response)=>
-      @saveConektaResponse(response)
+      @saveOpenpayResponse(response)
       @submitForm()
 
-    saveConektaResponse: (response)->
+    saveOpenpayResponse: (response)->
       @form.find("input[name='payment_source[#{@currentMethod}][gateway_payment_profile_id]']").val(response.id)
       @form.find("input[name='payment_source[#{@currentMethod}][openpay_response]']").val(JSON.stringify(response))
