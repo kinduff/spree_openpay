@@ -15,6 +15,10 @@ Spree::OrdersController.class_eval do
         if order_user.openpay_id.nil?
             openpay_card_method = Spree::PaymentMethod.find_by(:type => "Spree::BillingIntegration::OpenpayGateway::Card")
             
+            if openpay_card_method.nil?
+                openpay_card_method = Spree::PaymentMethod.find_by(:type => "Spree::BillingIntegration::OpenpayGateway::Cash")
+            end
+            
             #If the Payment Method is not defined we can not create the user without the private key
             unless openpay_card_method.nil?
                 @openpay_api = openpay_card_method.preferred_test_mode
