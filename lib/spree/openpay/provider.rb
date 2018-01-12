@@ -100,9 +100,9 @@ module Spree::Openpay
       amount_money = order.total.to_f
       
       if source_method == Spree::Openpay::PaymentSource::Cash && gateway_params[:currency] != 'MXN'
-        return build_common_to_cash(amount, gateway_params, amount_money, true) 
+        return build_common_to_cash(amount, gateway_params, amount_money, true, use_customer) 
       elsif source_method == Spree::Openpay::PaymentSource::Cash && gateway_params[:currency] == 'MXN'
-        return build_common_to_cash(amount, gateway_params, amount_money, false)
+        return build_common_to_cash(amount, gateway_params, amount_money, false, use_customer)
       else
         # {
         #   'amount'               => amount,
@@ -216,7 +216,7 @@ module Spree::Openpay
       }
     end
     
-    def build_common_to_cash(amount, gateway_params, amount_money, exchange)
+    def build_common_to_cash(amount, gateway_params, amount_money, exchange, use_customer)
       #If exchange is true, then we make the exchange to MXN currency
       if exchange
         #Check this fuction later
@@ -232,13 +232,24 @@ module Spree::Openpay
       #   'details' => details(gateway_params)
       # }
       
-      {
-        "method" => "store",
-        "amount" => amount_exchanged,
-        "description" => gateway_params[:order_id],
-        "order_id" => gateway_params[:order_id]
-        #"due_date" => "2014-05-20T13:45:00"
-      }
+      if use_customer
+        {
+          "method" => "store",
+          "amount" => amount_exchanged,
+          "description" => gateway_params[:order_id],
+          "order_id" => gateway_params[:order_id],
+          "customer" => customer(gateway_params)
+          #"due_date" => "2014-05-20T13:45:00"
+        }
+      else
+        {
+          "method" => "store",
+          "amount" => amount_exchanged,
+          "description" => gateway_params[:order_id],
+          "order_id" => gateway_params[:order_id]
+          #"due_date" => "2014-05-20T13:45:00"
+        }
+      end
     end
     
     def get_customer_id(gateway_params)
