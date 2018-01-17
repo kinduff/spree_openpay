@@ -2,7 +2,7 @@ module Spree::Openpay
   class Provider
     include Spree::Openpay::Client
 
-    attr_accessor :openpay_api, :auth_token, :source_method, :openpay_id, :customer_id, :end_point
+    attr_accessor :openpay_api, :auth_token, :source_method, :openpay_id, :use_wallet, :customer_id, :end_point
 
     attr_reader :options
 
@@ -18,6 +18,7 @@ module Spree::Openpay
       @auth_token    = options[:auth_token]
       @openpay_id    = options[:openpay_id]
       @source_method = payment_processor(options[:source_method])
+      @use_wallet    = options[:use_wallet] if @source_method == Spree::Openpay::PaymentSource::Card
       @customer_id = nil
       @end_point = ""
     end
@@ -26,31 +27,45 @@ module Spree::Openpay
       #Customer Openpay ID
       @customer_id = get_customer_id(gateway_options)
       
-      #If customer ID is not defined, we create only the charge
+      #If customer ID is not defined or the order has a annonymous user, we create only the charge
       if @customer_id.nil?
-        #We added the method_params for the source_id in Openpay with customer info
-        common = build_common(amount, method_params, gateway_options, true)
-        #Openpay charge with token
-        @end_point = "charges"
-        commit common, method_params, gateway_options
+        build_no_wallet(amount, method_params, gateway_options)
       else
-        #We added the method_params for the source_id in Openpay without customer info
-        common = build_common(amount, method_params, gateway_options, false)
-        #If it is credit card we create it
-        if source_method == Spree::Openpay::PaymentSource::Card
-          common_card = build_common_card(method_params, gateway_options)
-          #Openpay card by token
-          @end_point = "customers/#{customer_id}/cards"
-          commit common_card, method_params, gateway_options
+        #If the payment is credit card, we check if we create a wallet customer
+        unless @use_wallet.nil?
+          if @use_wallet
+            #We added the method_params for the source_id in Openpay without customer info
+            common = build_common(amount, method_params, gateway_options, false)
+            
+            #If credit card doesn't exist we create it
+            unless exist_card(method_params)
+              #Openpay card by token
+              common_card = build_common_card(method_params, gateway_options)
+              @end_point = "customers/#{customer_id}/cards"
+              commit common_card, method_params, gateway_options
+            end
+            
+            #Openpay charge after creating card
+            @end_point = "customers/#{customer_id}/charges"
+            commit common, method_params, gateway_options
+          else
+            build_no_wallet(amount, method_params, gateway_options)
+          end
+        else
+          build_no_wallet(amount, method_params, gateway_options)
         end
-        
-        #Openpay charge after creating card
-        @end_point = "customers/#{customer_id}/charges"
-        commit common, method_params, gateway_options
       end
     end
 
     alias_method :purchase, :authorize
+
+    def build_no_wallet(amount, method_params, gateway_options)
+      #We added the method_params for the source_id in Openpay with customer info
+      common = build_common(amount, method_params, gateway_options, true)
+      #Openpay charge with token
+      @end_point = "charges"
+      commit common, method_params, gateway_options
+    end
 
     def capture(amount, method_params, gateway_options = {})
       Response.new({}, gateway_options)
@@ -259,6 +274,20 @@ module Spree::Openpay
         return nil
       else  
         return order.user.openpay_id
+      end
+    end
+    
+    def exist_card(method)
+      card = Spree::CreditCard.find_by(:gateway_payment_profile_id => method.gateway_payment_profile_id)
+      
+      #If card is nil then we do not create the card in openpay
+      return true if card.nil?
+      
+      #If the payments completed are only one, then it is a new card, we have to register it in openpay
+      if card.payments.where(:state => "completed").count > 1
+        true
+      else
+        false
       end
     end
   end

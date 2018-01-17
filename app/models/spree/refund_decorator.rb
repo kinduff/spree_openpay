@@ -11,10 +11,20 @@ module Spree
             payment_method = payment.payment_method
             order_user = payment.order.user
             
+            if payment_method.class != Spree::BillingIntegration::OpenpayGateway::Card
+                puts "El Metodo de Pago es diferente a Tarjeta, reembolso no generado en Openpay"
+                return
+            end
+            
             @openpay_api = payment_method.preferred_test_mode
             @auth_token = payment_method.preferred_auth_token
             @openpay_id = payment_method.preferred_openpay_id
-            @end_point = "customers/#{order_user.openpay_id}/charges/#{payment.transaction_id}/refund"
+            
+            if order_user.nil? || !payment_method.preferred_use_wallet
+                @end_point = "charges/#{payment.transaction_id}/refund"
+            else
+                @end_point = "customers/#{order_user.openpay_id}/charges/#{payment.transaction_id}/refund"
+            end
             
             params = {
                 "description" => "Refund for order #{payment.order.number}"
