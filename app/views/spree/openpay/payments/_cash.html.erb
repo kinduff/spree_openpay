@@ -20,7 +20,7 @@
       <td class='align-center' id='barcode'>
         <%= image_tag(@order_details['payment_method']['barcode_url']) %>
         <div><%= @order_details['payment_method']['barcode'] %></div>
-        <% openpay_api = @order.payments.valid.last.payment_method.preferred_test_mode ? "https://sandbox-dashboard.openpay.mx" : "https://dev-api.openpay.mx" %>
+        <% openpay_api = @order.payments.valid.last.payment_method.preferred_test_mode ? "https://sandbox-dashboard.openpay.mx" : "https://api.openpay.mx" %>
         <% merchant_id = @order.payments.valid.last.payment_method.preferred_openpay_id %>
         <div><%= link_to t('openpay.cash.payment_bill'), "#{openpay_api}/paynet-pdf/#{merchant_id}/#{@order_details['payment_method']['reference']}", target: '_blank' %></div>
       </td>

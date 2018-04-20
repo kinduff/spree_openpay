@@ -60,7 +60,7 @@ module Spree
             if @openpay_api
                 "https://sandbox-api.openpay.mx/v1/"
             else
-                "https://dev-api.openpay.mx/v1/"
+                "https://api.openpay.mx/v1/"
             end
         end
         
