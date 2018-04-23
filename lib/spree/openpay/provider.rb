@@ -253,16 +253,16 @@ module Spree::Openpay
           "amount" => amount_exchanged,
           "description" => gateway_params[:order_id],
           "order_id" => gateway_params[:order_id],
-          "customer" => customer(gateway_params)
-          #"due_date" => "2014-05-20T13:45:00"
+          "customer" => customer(gateway_params),
+          "due_date" => 3.days.from_now.utc.iso8601
         }
       else
         {
           "method" => "store",
           "amount" => amount_exchanged,
           "description" => gateway_params[:order_id],
-          "order_id" => gateway_params[:order_id]
-          #"due_date" => "2014-05-20T13:45:00"
+          "order_id" => gateway_params[:order_id],
+          "due_date" => 3.days.from_now.utc.iso8601
         }
       end
     end
